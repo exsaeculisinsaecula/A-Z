@@ -130,7 +130,7 @@ progress.md → 상태판 [~] + 이름 → tasks.md 카드 → 작업 1개 → �
 - 커밋은 사용자가 요청할 때만.
 - 형식: `T17: 피드 카드와 미디어 그리드`
 - `android/key.properties`, 키스토어, `build/`, `.dart_tool/` 금지.
-- **기능 1개 완료마다 release APK·Windows exe를 릴리즈하고 GitHub Release에 둘 다 올린다.** `gh release create`에 APK 3종 + `a_z.exe`를 함께 첨부한다. 결과를 progress.md에 기록한다.
+- **기능 1개 완료마다 GitHub Release에 올린다.** Windows는 `A-Z-Setup.exe` (7-Zip SFX 단일 설치 파일, `%LOCALAPPDATA%\A-Z`에 자동 설치)를 만든다. APK는 `--split-per-abi` 3종. 결과를 progress.md에 기록한다.
 
 ---
 

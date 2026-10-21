@@ -92,7 +92,7 @@ M4  [..........]   0%   0/7     출시
 | 날짜 | 작업 | 작업자 | 결과 | 메모 |
 |---|---|---|---|---|
 | 2026-10-21 | 제출용 목업 | Claude Code | UI 목업 4종 + [Release](https://github.com/exsaeculisinsaecula/A-Z/releases/tag/t5-postcodec) | 시작·피드·궤도·폰 (design/mockup_*.png) |
-| 2026-10-21 | MVP | Claude Code | 작동하는 앱 [Release](https://github.com/exsaeculisinsaecula/A-Z/releases/tag/mvp-working) | 피드·작성·검색·필터·내비게이터, 테스트 84개 |
+| 2026-10-21 | v0.1.0 OZ 디자인 | Claude Code | [Release](https://github.com/exsaeculisinsaecula/A-Z/releases/tag/v0.1.0-oz) | NSIS 설치 마법사 + OZ 배경·카드·컨트롤 바 |
 | 2026-10-21 | T6 Vault | Claude Code | 테스트 84개 | AtomicWriter·Vault·Trash (MemoryFileSystem) |
 | 2026-10-21 | T4 Archive | Claude Code | 테스트 51개, [Release](https://github.com/exsaeculisinsaecula/A-Z/releases/tag/t4-archive) | 작성·수정·삭제·검색·통계·궤도 그래프 |
 | 2026-10-21 | T3 기록 모델 | Claude Code | 테스트 28개, APK+exe 릴리즈 | Post/MediaRef/TagParser/KoText/PostQuery/AzException |

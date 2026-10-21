@@ -149,16 +149,18 @@ class PostCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AzColors.surface,
-          borderRadius: BorderRadius.circular(AzShapes.radiusCard),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: selected ? AzColors.categoryColor(idx) : AzColors.line,
             width: selected ? 2 : 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: selected ? 0.06 : 0.02),
-              blurRadius: selected ? 12 : 4,
-              offset: const Offset(0, 2),
+              color: selected
+                  ? AzColors.categoryColor(idx).withValues(alpha: 0.15)
+                  : Colors.black.withValues(alpha: 0.03),
+              blurRadius: selected ? 16 : 8,
+              offset: const Offset(0, 4),
             ),
           ],
         ),

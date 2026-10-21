@@ -129,22 +129,36 @@ class _HomeShellState extends State<HomeShell> {
         final isTablet = width >= 800 && width < 1200;
 
         return Scaffold(
-          body: Column(
+          body: Stack(
             children: [
-              _TopBar(state: _state),
-              Expanded(
-                child: Row(
-                  children: [
-                    if (isDesktop || isTablet) _LegendPanel(state: _state),
-                    Expanded(child: FeedView(state: _state)),
-                    if (isDesktop) _NavigatorPanel(state: _state),
-                  ],
+              // OZ 배경 (동심원 링 + 글로우)
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: OrbitBackgroundPainter(
+                    rotation: DateTime.now().millisecondsSinceEpoch / 8000,
+                    scrollOffset: 0,
+                  ),
                 ),
               ),
-              _ControlBar(
-                state: _state,
-                navIndex: _navIndex,
-                onNav: (i) => setState(() => _navIndex = i),
+              // 실제 UI
+              Column(
+                children: [
+                  _TopBar(state: _state),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        if (isDesktop || isTablet) _LegendPanel(state: _state),
+                        Expanded(child: FeedView(state: _state)),
+                        if (isDesktop) _NavigatorPanel(state: _state),
+                      ],
+                    ),
+                  ),
+                  _ControlBar(
+                    state: _state,
+                    navIndex: _navIndex,
+                    onNav: (i) => setState(() => _navIndex = i),
+                  ),
+                ],
               ),
             ],
           ),
@@ -439,36 +453,60 @@ class _ControlBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // 마스코트
-          Container(
-            width: 28,
-            height: 28,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: AzColors.primary, width: 2),
-            ),
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          decoration: BoxDecoration(
+            color: AzColors.surface,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: AzColors.line),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.06),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-          const SizedBox(width: 24),
-          // 뷰 전환
-          _NavButton(label: 'FEED', active: navIndex == 0, onTap: () => onNav(0)),
-          const SizedBox(width: 8),
-          _NavButton(label: 'orbit', active: navIndex == 1, onTap: () => onNav(1)),
-          const SizedBox(width: 24),
-          // 이전·다음
-          TextButton(onPressed: () {}, child: const Text('< prev', style: TextStyle(color: AzColors.inkSub))),
-          TextButton(onPressed: () {}, child: const Text('next >', style: TextStyle(color: AzColors.inkSub))),
-          const SizedBox(width: 24),
-          // 가져오기
-          TextButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.upload_file, size: 16, color: AzColors.ink),
-            label: const Text('IMPORT', style: TextStyle(color: AzColors.ink, fontSize: 12)),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 마스코트 (동심원 링)
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AzColors.primary, width: 2.5),
+                ),
+                child: Center(
+                  child: Container(
+                    width: 12,
+                    height: 12,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AzColors.primary,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              _NavButton(label: 'FEED', active: navIndex == 0, onTap: () => onNav(0)),
+              const SizedBox(width: 4),
+              _NavButton(label: 'ORBIT', active: navIndex == 1, onTap: () => onNav(1)),
+              const SizedBox(width: 16),
+              Container(
+                width: 1,
+                height: 24,
+                color: AzColors.line,
+              ),
+              const SizedBox(width: 16),
+              TextButton(onPressed: () {}, child: const Text('< prev', style: TextStyle(color: AzColors.inkSub))),
+              TextButton(onPressed: () {}, child: const Text('next >', style: TextStyle(color: AzColors.inkSub))),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
