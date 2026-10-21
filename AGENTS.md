@@ -4,7 +4,7 @@
 |---|---|
 | 문서 번호 | AZ-PRC |
 | 문서 이름 | A-Z 작업 절차서 (사람과 모든 AI 도구 공통) |
-| 버전 · 상태 | 1.0 · 초안 (검토 대기) |
+| 버전 · 상태 | 1.1 · 초안 (검토 대기) |
 | 작성일 · 수정일 | 2026-10-21 · 2026-10-21 |
 | 작성 · 승인 | Claude Code (AI) · 프로젝트 소유자 (미승인) |
 | 적용 표준 | ISO/IEC/IEEE 15289:2019 (문서), ISO/IEC/IEEE 12207:2017 (형상·품질) |
@@ -125,11 +125,12 @@ progress.md → 상태판 [~] + 이름 → tasks.md 카드 → 작업 1개 → �
 | 마일스톤 끝 | `flutter test integration_test -d windows` |
 | 배포 | release APK에 INTERNET 없는지 확인 |
 
-## 8. 커밋
+## 8. 커밋과 릴리즈
 
-- 사용자가 요청할 때만.
+- 커밋은 사용자가 요청할 때만.
 - 형식: `T17: 피드 카드와 미디어 그리드`
 - `android/key.properties`, 키스토어, `build/`, `.dart_tool/` 금지.
+- **기능 1개 완료마다 release APK·Windows exe를 릴리즈하고 GitHub Release에 둘 다 올린다.** `gh release create`에 APK 3종 + `a_z.exe`를 함께 첨부한다. 결과를 progress.md에 기록한다.
 
 ---
 
@@ -138,3 +139,4 @@ progress.md → 상태판 [~] + 이름 → tasks.md 카드 → 작업 1개 → �
 | 버전 | 날짜 | 변경 내용 | 작성 |
 |---|---|---|---|
 | 1.0 | 2026-10-21 | ISO 한국 표준으로 처음부터 재작성 | Claude Code |
+| 1.1 | 2026-10-21 | APK+Windows exe 릴리즈 규칙 (D-13) | Claude Code |

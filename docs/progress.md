@@ -4,7 +4,7 @@
 |---|---|
 | 문서 번호 | AZ-PSR |
 | 문서 이름 | A-Z 진행 상태 보고서 |
-| 버전 · 상태 | 1.0 · 계속 갱신 |
+| 버전 · 상태 | 1.1 · 계속 갱신 |
 | 보고 기준일 | 2026-10-21 |
 | 작성 | Claude Code (AI) |
 | 적용 표준 | ISO/IEC/IEEE 15289:2019, ISO/IEC/IEEE 29119-3:2021 |
@@ -19,15 +19,15 @@
 ## 한눈에
 
 ```
-M0  [..........]   0%   0/2     준비
-M1  [..........]   0%   0/11    기록 엔진
+M0  [##........] 100%   2/2     준비
+M1  [##........]  18%   2/11    기록 엔진
 M2  [..........]   0%   0/11    피드 앱
 M3  [..........]   0%   0/6     궤도 뷰
 M4  [..........]   0%   0/7     출시
 ```
 
-- 현재 상태: **문서 재작성 완료 (ISO 한국 표준).** 코드 없음.
-- 다음 작업: **T1 개발 환경**
+- 현재 상태: **T4 완료.** Archive 작성·수정·삭제·검색·통계·그래프.
+- 다음 작업: **T5 PostCodec**
 - 막힌 것: 없음
 
 ---
@@ -38,11 +38,11 @@ M4  [..........]   0%   0/7     출시
 
 | 작업 | 이름 | 상태 | 작업자 | 날짜 | 메모 |
 |---|---|---|---|---|---|
-| T1 | 개발 환경 | [ ] | | | |
-| T2 | 프로젝트 뼈대 | [ ] | | | |
-| T3 | 기록 모델 | [ ] | | | |
-| T4 | Archive | [ ] | | | |
-| T5 | PostCodec | [ ] | | | |
+| T1 | 개발 환경 | [x] | Claude Code | 2026-10-21 | flutter doctor 전부 통과 |
+| T2 | 프로젝트 뼈대 | [x] | Claude Code | 2026-10-21 | flutter analyze 0, APK 릴리즈 |
+| T3 | 기록 모델 | [x] | Claude Code | 2026-10-21 | 테스트 28개, APK+exe 릴리즈 |
+| T4 | Archive | [x] | Claude Code | 2026-10-21 | 테스트 51개, APK+exe 릴리즈 |
+| T5 | PostCodec | [~] | Claude Code | 2026-10-21 | |
 | T6 | AtomicWriter · Vault · Trash | [ ] | | | |
 | T7 | StorageLocator | [ ] | | | |
 | T8 | Index · Settings · Watcher | [ ] | | | |
@@ -80,10 +80,10 @@ M4  [..........]   0%   0/7     출시
 
 ## 인수인계 메모
 
-> ISO 한국 표준으로 문서 6종을 처음부터 재작성했습니다.
-> 다음: T1 개발 환경 (Flutter · Android SDK 설치).
-> 이 PC에 있음: Node 24, adb, VS 2022, Python 3.14.
-> 없음: Flutter, Android SDK, JDK.
+> T1 개발 환경 완료: Flutter 3.47.7, JDK 17, Android SDK 36, VS C++.
+> 다음: T2 프로젝트 뼈대 (`flutter create` + 빈 창 + ko-KR + INTERNET 제거).
+> 규칙: 기능 1개마다 release APK + Windows exe 릴리즈 (D-13, AGENTS.md 8절).
+> PATH: `C:\dev\flutter\bin`, JAVA_HOME: `C:\Program Files\Microsoft\jdk-17.0.20.101-hotspot`.
 
 ---
 
@@ -91,6 +91,10 @@ M4  [..........]   0%   0/7     출시
 
 | 날짜 | 작업 | 작업자 | 결과 | 메모 |
 |---|---|---|---|---|
+| 2026-10-21 | T4 Archive | Claude Code | 테스트 51개, [Release](https://github.com/exsaeculisinsaecula/A-Z/releases/tag/t4-archive) | 작성·수정·삭제·검색·통계·궤도 그래프 |
+| 2026-10-21 | T3 기록 모델 | Claude Code | 테스트 28개, APK+exe 릴리즈 | Post/MediaRef/TagParser/KoText/PostQuery/AzException |
+| 2026-10-21 | T2 프로젝트 뼈대 | Claude Code | APK 릴리즈 완료 | app-arm64 14.8MB, INTERNET 없음, ko-KR, app.az.archive |
+| 2026-10-21 | T1 개발 환경 | Claude Code | flutter doctor 0 issues | Flutter 3.47.7, JDK 17, Android SDK 36, VS C++ |
 | 2026-10-21 | 문서 재작성 | Claude Code | ISO 한국 표준 1.0 | AZ-xxx 문서 체계, F/NF/DR/LC/AC/TC 정리 |
 
 ---
@@ -111,6 +115,7 @@ M4  [..........]   0%   0/7     출시
 | D-10 | 2026-10-21 | ISO 문서 체계 (AZ-xxx) | 사용자 요구 |
 | D-11 | 2026-10-21 | 접근성 categoriesText | WCAG AA |
 | D-12 | 2026-10-21 | 지역 KR · ko-KR | 사용자 지정 |
+| D-13 | 2026-10-21 | **기능 1개 완료마다 release APK + Windows exe 릴리즈 → GitHub Release 업로드** | 사용자 지정. 진행 확인·배포용 |
 
 ---
 
@@ -130,11 +135,12 @@ M4  [..........]   0%   0/7     출시
 
 | 항목 | 버전 |
 |---|---|
-| Flutter | (T1에서) |
-| Dart | |
-| Android SDK | |
-| JDK | |
-| Visual Studio | 2022 Community |
+| Flutter | 3.47.7 stable (`C:\dev\flutter`) |
+| Dart | 3.13.5 |
+| Android SDK | 36.0.0 (`%LOCALAPPDATA%\Android\Sdk`) |
+| JDK | Microsoft OpenJDK 17.0.20.1 |
+| Visual Studio | 2022 Community 17.14 (C++ 워크로드) |
+| adb | 37.0.1 (platform-tools) |
 
 ---
 
@@ -143,3 +149,4 @@ M4  [..........]   0%   0/7     출시
 | 버전 | 날짜 | 변경 내용 | 작성 |
 |---|---|---|---|
 | 1.0 | 2026-10-21 | ISO 한국 표준으로 처음부터 재작성 | Claude Code |
+| 1.1 | 2026-10-21 | T1 완료, D-13(APK 릴리즈) 기록 | Claude Code |
