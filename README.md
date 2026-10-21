@@ -4,9 +4,9 @@
 
 **처음으로** · [요구사항](docs/requirements.md) · [설계](docs/design.md) · [작업 순서](docs/tasks.md) · [진행 상황](docs/progress.md) · [작업 지침](AGENTS.md)
 
-| 문서 번호 | 버전 · 상태 | 수정일 |
-|---|---|---|
-| AZ-OVW (개요) | 0.3 · 초안 (검토 대기) | 2026-10-21 |
+| 문서 번호 | 버전 · 상태 | 작성일 · 수정일 | 적용 표준 |
+|---|---|---|---|
+| AZ-OVW (개요) | 0.4 · 초안 (검토 대기) | 2026-10-21 · 2026-10-21 | ISO/IEC/IEEE 15289 (문서 관리) |
 
 아무 드라이브(C:·D:·외장 디스크·SD 카드)나 원하는 위치에 **보관함 폴더**를 하나 만들고 사진·영상·메모를 모읍니다.
 피드에서는 트위터처럼 시간순 카드로, **궤도 뷰**에서는 카테고리별 구체와 링이 떠 있는 3D 공간으로 둘러봅니다.
@@ -184,51 +184,108 @@ flutter analyze  ->  flutter test  ->  flutter test integration_test -d windows
 
 ## 폴더 구조
 
+문서는 ISO/IEC/IEEE 15289의 문서 체계(AZ-xxx)를 따릅니다. 코드와 문서, 자료, 시험을 나눠 두었습니다.
+
 ```
-mini project/
- +-- README.md
- +-- AGENTS.md ................. 작업 지침 (사람과 모든 AI 도구 공통)
- +-- CLAUDE.md  GEMINI.md ...... AI 도구별 입구 -> AGENTS.md
- +-- .github/copilot-instructions.md  -> AGENTS.md
- +-- .editorconfig  .gitattributes .. UTF-8 · LF 통일
- +-- _config.yml ............... 문서 사이트(GitHub Pages) 설정
- +-- pubspec.yaml
- +-- lib/
- |    +-- main.dart ............ main()  객체 조립(합성 루트)
- |    +-- app.dart ............. AzApp, HomeShell, AppState, AppScope, AzRegion
- |    +-- archive.dart ......... Post, MediaRef, MediaKind, Category, PostQuery, TagParser, KoText, Archive, Clock, AzException
- |    +-- vault.dart ........... Vault, PostCodec, AtomicWriter, VaultIndex, VaultSettings, VaultWatcher, Trash
- |    +-- storage.dart ......... StorageLocator > WindowsStorageLocator / AndroidStorageLocator,
- |    |                          StorageVolume, LocationCheck, VaultCatalog
- |    +-- media.dart ........... MediaProbe > PhotoProbe / VideoProbe, ProbeRegistry, MediaInfo, ThumbnailCache
- |    +-- importer.dart ........ FolderScanner, ContentHasher, ImportJob
- |    +-- tutorial.dart ........ TutorialStep, TutorialController, SampleVaultSeeder
- |    +-- theme.dart ........... AzColors, AzShapes, AzMotion, AzTheme  (디자인 토큰)
- |    `-- ui/
- |         +-- start.dart ...... VaultStartScreen (새로 만들기 / 열기 / 최근 보관함)
- |         +-- components.dart . Legend, SearchBox, StatusPill, NavigatorCard, ControlBar,
- |         |                     Composer, MediaViewer, Toast, EmptyHint
- |         +-- feed.dart ....... FeedView, PostCard, MediaGrid
- |         +-- orbit.dart ...... OrbitView, OrbitLayout, Camera3D, OrbitPainter, LabelLayer, Tour
- |         `-- coach_marks.dart  CoachMarkOverlay
- +-- assets/
- |    +-- fonts/ ............... Pretendard (OFL)
- |    `-- sample_vault/ ........ 예시 보관함
- +-- tools/make_sample_media.py  예시 사진·영상 생성 (개발용, 앱에 안 들어감)
- +-- test/ ..................... 단위·위젯 테스트 (MemoryFileSystem)
- +-- integration_test/ ......... e2e (실제 앱, Windows·Android)
- +-- android/  windows/ ........ flutter create가 만드는 플랫폼 폴더
- `-- docs/
-      +-- requirements.md  design.md  tasks.md  progress.md
+mini project/                           저장소 루트
+│
+├─ 문서 ··········································· ISO/IEC/IEEE 15289 (문서 관리)
+│  ├─ README.md .............. AZ-OVW   개요: 무엇을 만드는지, 설치·사용·빌드
+│  ├─ AGENTS.md .............. AZ-PRC   작업 절차서 (사람 + 모든 AI 도구 공통)
+│  `─ docs/
+│     ├─ requirements.md ..... AZ-SRS   소프트웨어 요구사항 명세 (ISO 29148, 25010)
+│     ├─ design.md ........... AZ-AD    아키텍처 기술 + 시험 계획 (ISO 42010, 29119-3)
+│     ├─ tasks.md ............ AZ-SDP   소프트웨어 개발 계획 (ISO 12207)
+│     `─ progress.md .......... AZ-PSR   진행 상태 보고 (ISO 15289)
+│
+├─ 지침 연결 ······································ 같은 규칙을 도구마다 가리킴
+│  ├─ CLAUDE.md ............................... -> AGENTS.md (Claude Code)
+│  ├─ GEMINI.md ............................... -> AGENTS.md (Gemini CLI)
+│  `─ .github/copilot-instructions.md ......... -> AGENTS.md (GitHub Copilot)
+│
+├─ 코드 ·········································· Flutter (Dart 패키지 a_z)
+│  ├─ pubspec.yaml .........  이름·버전·의존성·assets 등록
+│  `─ lib/
+│     ├─ main.dart .......... main()   객체 조립 (합성 루트)
+│     ├─ app.dart ........... AzApp, HomeShell, AppState, AppScope, AzRegion
+│     ├─ archive.dart ....... Post, MediaRef, MediaKind, Category, PostQuery,
+│     │                       TagParser, KoText, Archive, Clock, AzException
+│     ├─ vault.dart ......... Vault, PostCodec, AtomicWriter, VaultIndex,
+│     │                       VaultSettings, VaultWatcher, Trash
+│     ├─ storage.dart ....... StorageLocator (interface)
+│     │                        ├─ WindowsStorageLocator  (본보기)
+│     │                        └─ AndroidStorageLocator
+│     │                       StorageVolume, LocationCheck, VaultCatalog
+│     ├─ media.dart ......... MediaProbe (abstract)
+│     │                        ├─ PhotoProbe  (본보기)
+│     │                        └─ VideoProbe
+│     │                       ProbeRegistry, MediaInfo, ThumbnailCache
+│     ├─ importer.dart ...... FolderScanner, ContentHasher, ImportJob
+│     ├─ tutorial.dart ...... TutorialStep, TutorialController, SampleVaultSeeder
+│     ├─ theme.dart ......... AzColors, AzShapes, AzMotion, AzTheme  (디자인 토큰)
+│     `─ ui/
+│        ├─ start.dart ....... VaultStartScreen (새로 만들기 / 열기 / 최근 보관함)
+│        ├─ components.dart .. Legend, SearchBox, StatusPill, NavigatorCard,
+│        │                     ControlBar, Composer, MediaViewer, Toast, EmptyHint
+│        ├─ feed.dart ........ FeedView, PostCard, MediaGrid
+│        ├─ orbit.dart ....... OrbitView, OrbitLayout, Camera3D, OrbitPainter,
+│        │                     LabelLayer, Tour
+│        `─ coach_marks.dart . CoachMarkOverlay
+│
+├─ 자료 ···········································
+│  ├─ assets/
+│  │  ├─ fonts/ .............. Pretendard (SIL OFL 1.1)
+│  │  `─ sample_vault/ ....... 예시 보관함 (포스트 7 + 사진 5 + 영상 1)
+│  `─ tools/
+│     `─ make_sample_media.py  예시 자료 생성 (개발용, 앱에 들어가지 않음)
+│
+├─ 시험 ··········································· ISO/IEC/IEEE 29119-3 (시험)
+│  ├─ test/ .................. 단위·위젯 시험 (MemoryFileSystem, 가짜 의존성)
+│  `─ integration_test/ ...... 시스템·수용 시험 (실제 앱, Windows + Android)
+│
+├─ 플랫폼 ········································· flutter create 생성물
+│  ├─ android/ ............... Android APK (arm64)
+│  `─ windows/ ............... Windows x64 앱
+│
+`─ 저장소 설정
+   ├─ .editorconfig ......... UTF-8 · LF · 공백 통일
+   ├─ .gitattributes ........ 줄바꿈 LF, 바이너리 표시
+   `─ _config.yml ........... GitHub Pages 문서 사이트 (jekyll-theme-cayman)
 ```
 
-스타터 템플릿과의 대응:
+### 보관함 폴더 (사용자 자료, 어느 드라이브에든)
+
+경로 구분자는 어느 OS에서든 `/`, 이름은 유니코드 NFC, 시각은 ISO 8601(설계 4절, AZ-SRS DR-01~06).
+
+```
+<아무 드라이브·위치>/
+ `─ A-Z 보관함/                    이 폴더째 복사·이동 = 백업·이식
+     ├─ A-Z 시작하기.md            튜토리얼 포스트 (pinned)
+     ├─ <카테고리>/                폴더 = 카테고리 = 궤도 뷰의 구체 하나
+     │   ├─ 2026-10-01 0930 제목.md   포스트 = 마크다운 파일 하나
+     │   `─ 첨부/                       사진·영상 사본
+     ├─ 미분류/                    카테고리 없이 쓴 기록
+     `─ .az/                       앱 전용 (지워도 다시 만들어짐)
+         ├─ vault.json ........... 보관함 표시 (형식 이름, 버전, 만든 날짜)
+         ├─ settings.json ........ 카테고리 색·순서, 튜토리얼 진행
+         ├─ index.json ........... 색인 + 첨부 내용 해시 (캐시)
+         ├─ thumbs/ .............. 썸네일 (캐시)
+         ├─ import_state.json .... 가져오기 이어하기 정보
+         `─ trash/ ............... 지운 포스트·첨부 (복원 가능)
+
+(보관함 밖, 기기별 앱 설정 폴더)
+ ├─ recent_vaults.json ........... 이 기기에서 연 보관함 목록
+ `─ logs/a_z.log ................. 로그 (보관함에는 남기지 않음)
+```
+
+### 스타터 템플릿과의 대응
 
 | 스타터 | A-Z |
 |---|---|
 | `app.py` (창과 버튼) | `lib/main.dart` (객체 조립) + `lib/app.dart` (화면 틀·버튼·뷰 전환) |
 | `inventory.py` (대여·반납·저장) | `lib/archive.dart` (작성·수정·삭제·검색) + `lib/vault.dart` (보관함 읽기·쓰기) + `lib/storage.dart` (드라이브·위치) |
 | `data/equipment.json` | `assets/sample_vault/` (예시 보관함) |
+| `docs/` 4종 | `docs/` 4종 + AZ-xxx 문서 번호 |
 
 ## 문서
 
@@ -264,3 +321,14 @@ mini project/
 - 저장소 라이선스: 아직 정하지 않았습니다(progress.md Q-05). 정하기 전까지는 모든 권리가 저작자에게 있습니다.
 - 예시 자료(`assets/sample_vault/`의 사진·영상): 모두 `tools/make_sample_media.py`로 직접 만든 것입니다.
 - 글꼴: Pretendard (SIL Open Font License 1.1)
+
+---
+
+## 변경 이력
+
+| 버전 | 날짜 | 변경 내용 | 작성 |
+|---|---|---|---|
+| 0.1 | 2026-10-21 | 최초 작성 | Claude Code |
+| 0.2 | 2026-10-21 | 문서 번호(AZ-xxx), 읽는 순서, AI 도구 안내 추가 | Claude Code |
+| 0.3 | 2026-10-21 | ISO 표준 표, 대상 지역(KR·ko-KR) 추가 | Claude Code |
+| 0.4 | 2026-10-21 | 폴더 구조를 ISO/IEC/IEEE 15289 문서 체계로 재작성 (AZ-xxx · 표준 · 시험 분리), 보관함 구조에 ISO 표기 규칙 주석 추가 | Claude Code |

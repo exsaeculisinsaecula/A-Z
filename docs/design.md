@@ -6,7 +6,7 @@
 |---|---|
 | 문서 번호 | AZ-AD |
 | 문서 이름 | A-Z 아키텍처 기술서 (설계) |
-| 버전 · 상태 | 0.3 · 초안 (검토 대기) |
+| 버전 · 상태 | 0.4 · 초안 (검토 대기) |
 | 작성일 · 수정일 | 2026-10-21 · 2026-10-21 |
 | 작성 · 승인 | Claude Code (AI) · 프로젝트 소유자 (미승인) |
 | 적용 표준 | ISO/IEC/IEEE 42010:2022 (아키텍처 기술), ISO/IEC/IEEE 29119-3:2021 (시험 문서, 11절), ISO/IEC 40500:2012 (접근성, 2절), ISO 3166-1:2020 (국가 코드, 2.7절) |
@@ -587,20 +587,22 @@ StorageLocator (interface)
 
 ### 6.1 구조도
 
+파일 배치는 README 「폴더 구조」와 같다. 아래는 **런타임 계층**이다.
+
 ```
 +---------------------------------------------------------------+
-| main.dart     builds every object once (composition root)     |
+| main.dart     모든 객체를 한 번씩 만듦 (합성 루트)              |
 +---------------------------------------------------------------+
                                 |
                                 v
 +---------------------------------------------------------------+
-| SCREEN   app.dart     HomeShell, AppState(view/filter/select)  |  <- 보여주기만
+| SCREEN   app.dart     HomeShell, AppState(보기·필터·선택)       |  <- 보여주기만
 |          ui/start     VaultStartScreen                        |
 |          ui/feed      FeedView, PostCard, MediaGrid           |
 |          ui/orbit     OrbitView, Camera3D, OrbitPainter       |
 |          ui/comps     NavigatorCard, Legend, Composer ...     |
 +---------------------------------------------------------------+
-                                |  calls only, never touches disk
+                                |  호출만, 디스크에 손대지 않음
                                 v
 +---------------------------------------------------------------+
 | LOGIC    archive.dart   Archive, Post, PostQuery, TagParser   |  <- 위젯 import 금지
@@ -608,13 +610,13 @@ StorageLocator (interface)
 |          media.dart     ProbeRegistry, ThumbnailCache         |
 |          tutorial.dart  TutorialController, SampleVaultSeeder |
 +---------------------------------------------------------------+
-                                |  read / write
+                                |  읽기 / 쓰기
                                 v
 +---------------------------------------------------------------+
 | STORAGE  vault.dart     Vault, PostCodec, AtomicWriter,       |  <- 디스크는 여기만
 |                         VaultIndex, VaultSettings, Watcher    |
 |          storage.dart   StorageLocator, LocationCheck,        |
-|                         VaultCatalog (recent vaults)          |
+|                         VaultCatalog (최근 보관함)             |
 +---------------------------------------------------------------+
                                 |
                                 v
@@ -1150,3 +1152,4 @@ XR: 지금은 2D 패널 앱이다. 몰입형은 범위 밖이지만 **보관함 
 | 0.1 | 2026-10-21 | 최초 작성 | Claude Code |
 | 0.2 | 2026-10-21 | ISO/IEC/IEEE 42010 개요(0절: 이해관계자·관심사·관점·맥락·결정) 추가. 11절을 ISO/IEC/IEEE 29119-3 시험 계획(TC-01~15)으로 개편. ISO/IEC 40500 접근성: 원칙 7, 글씨용 카테고리 색 `categoriesText`, 대비표. 보관함 경로 구분자 `/`·NFC·ISO 8601 규칙 추가 | Claude Code |
 | 0.3 | 2026-10-21 | 대상 지역 대한민국(ISO 3166-1 `KR`): 2.7 지역화 설계, `AzRegion`·`KoText`, TC-16, 패키지 `flutter_localizations`·`intl`·`unorm_dart` 추가 | Claude Code |
+| 0.4 | 2026-10-21 | 6.1 구조도를 한국어로 정리, README 「폴더 구조」(AZ-xxx 문서 체계)와 일치하도록 연결 | Claude Code |
