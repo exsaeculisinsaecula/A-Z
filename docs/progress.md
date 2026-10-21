@@ -20,14 +20,14 @@
 
 ```
 M0  [##........] 100%   2/2     준비
-M1  [##........]  18%   2/11    기록 엔진
-M2  [..........]   0%   0/11    피드 앱
+M1  [#####.....]  36%   4/11    기록 엔진
+M2  [####......]  36%   4/11    피드 앱
 M3  [..........]   0%   0/6     궤도 뷰
 M4  [..........]   0%   0/7     출시
 ```
 
-- 현재 상태: **T4 완료.** Archive 작성·수정·삭제·검색·통계·그래프.
-- 다음 작업: **T5 PostCodec**
+- 현재 상태: **MVP 작동.** 피드·작성·검색·필터·내비게이터 동작.
+- 다음 작업: **T7 StorageLocator** 또는 **T15 HomeShell 다듬기**
 - 막힌 것: 없음
 
 ---
@@ -42,8 +42,8 @@ M4  [..........]   0%   0/7     출시
 | T2 | 프로젝트 뼈대 | [x] | Claude Code | 2026-10-21 | flutter analyze 0, APK 릴리즈 |
 | T3 | 기록 모델 | [x] | Claude Code | 2026-10-21 | 테스트 28개, APK+exe 릴리즈 |
 | T4 | Archive | [x] | Claude Code | 2026-10-21 | 테스트 51개, APK+exe 릴리즈 |
-| T5 | PostCodec | [~] | Claude Code | 2026-10-21 | |
-| T6 | AtomicWriter · Vault · Trash | [ ] | | | |
+| T5 | PostCodec | [x] | Claude Code | 2026-10-21 | 테스트 66개, [Release](https://github.com/exsaeculisinsaecula/A-Z/releases/tag/t5-postcodec) |
+| T6 | AtomicWriter · Vault · Trash | [x] | Claude Code | 2026-10-21 | 테스트 84개, MVP 릴리즈 |
 | T7 | StorageLocator | [ ] | | | |
 | T8 | Index · Settings · Watcher | [ ] | | | |
 | T9 | MediaProbe | [ ] | | | |
@@ -91,6 +91,9 @@ M4  [..........]   0%   0/7     출시
 
 | 날짜 | 작업 | 작업자 | 결과 | 메모 |
 |---|---|---|---|---|
+| 2026-10-21 | 제출용 목업 | Claude Code | UI 목업 4종 + [Release](https://github.com/exsaeculisinsaecula/A-Z/releases/tag/t5-postcodec) | 시작·피드·궤도·폰 (design/mockup_*.png) |
+| 2026-10-21 | MVP | Claude Code | 작동하는 앱 [Release](https://github.com/exsaeculisinsaecula/A-Z/releases/tag/mvp-working) | 피드·작성·검색·필터·내비게이터, 테스트 84개 |
+| 2026-10-21 | T6 Vault | Claude Code | 테스트 84개 | AtomicWriter·Vault·Trash (MemoryFileSystem) |
 | 2026-10-21 | T4 Archive | Claude Code | 테스트 51개, [Release](https://github.com/exsaeculisinsaecula/A-Z/releases/tag/t4-archive) | 작성·수정·삭제·검색·통계·궤도 그래프 |
 | 2026-10-21 | T3 기록 모델 | Claude Code | 테스트 28개, APK+exe 릴리즈 | Post/MediaRef/TagParser/KoText/PostQuery/AzException |
 | 2026-10-21 | T2 프로젝트 뼈대 | Claude Code | APK 릴리즈 완료 | app-arm64 14.8MB, INTERNET 없음, ko-KR, app.az.archive |

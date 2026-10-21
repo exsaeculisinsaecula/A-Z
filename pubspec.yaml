@@ -15,6 +15,8 @@ dependencies:
   intl: ^0.20.2
   unorm_dart: ^0.3.0
   yaml: ^3.1.2
+  file: ^7.0.0
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:
