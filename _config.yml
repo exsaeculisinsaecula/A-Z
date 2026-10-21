@@ -1,7 +1,7 @@
 # GitHub Pages 문서 사이트 설정 (앱과는 관계없음)
 title: A-Z
 description: 사진·영상·메모를 A부터 Z까지 한 곳에 — 계획 문서
-lang: ko
+lang: ko-KR
 theme: jekyll-theme-cayman
 
 markdown: kramdown

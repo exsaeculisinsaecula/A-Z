@@ -1,6 +1,16 @@
-# 작업 순서 — 어떤 순서로 구현할까
+# 소프트웨어 개발 계획서 (SDP) — 어떤 순서로 구현할까
 
 [처음으로](../README.md) · [요구사항](requirements.md) · [설계](design.md) · **작업 순서** · [진행 상황](progress.md) · [작업 지침](../AGENTS.md)
+
+| 항목 | 내용 |
+|---|---|
+| 문서 번호 | AZ-SDP |
+| 문서 이름 | A-Z 소프트웨어 개발 계획서 (작업 순서) |
+| 버전 · 상태 | 0.3 · 초안 (검토 대기) |
+| 작성일 · 수정일 | 2026-10-21 · 2026-10-21 |
+| 작성 · 승인 | Claude Code (AI) · 프로젝트 소유자 (미승인) |
+| 적용 표준 | ISO/IEC/IEEE 12207:2017 (생애주기 프로세스), ISO/IEC/IEEE 15289:2019 (문서 내용) |
+| 상위 문서 | [AZ-SRS 요구사항](requirements.md), [AZ-AD 설계](design.md) |
 
 이 문서는 **작업 카드 모음**입니다. 사람이든 AI 도구든, 대화 기록 없이 이 카드와 링크된 문서만 보고 작업을 이어갈 수 있게 썼습니다.
 
@@ -37,6 +47,22 @@ T   | 01 02 | 03 04 05 06 07 08 09 10 11 12 13 | 14 15 16 17 18 ... 24   | 25 26
 | M2 피드 앱 | 시작 화면부터 피드까지. 이 시점부터 매일 쓸 수 있다 |
 | M3 궤도 뷰 | 3D 공간과 튜토리얼 화면 |
 | M4 출시 | 다듬기·장애 점검·성능·e2e·APK와 Windows 배포 |
+
+### 생애주기 프로세스 대응 (ISO/IEC/IEEE 12207)
+
+| 12207 프로세스 | 이 프로젝트에서 | 산출물 |
+|---|---|---|
+| 이해관계자 요구 정의 · 시스템/소프트웨어 요구 정의 | 계획 단계 (완료) | AZ-SRS |
+| 아키텍처 정의 · 설계 정의 | 계획 단계 (완료) | AZ-AD |
+| 프로젝트 계획 · 평가·통제 | 이 문서, progress.md | AZ-SDP, AZ-PSR |
+| 인프라 관리 | M0 (T1~T2) | 개발 환경, 빈 앱 |
+| 구현 | M1~M3 (T3~T30) | `lib/`, `assets/` |
+| 통합 | M2~M3 끝, T29 | 두 뷰가 이어진 앱 |
+| 검증 (verification) | 모든 카드의 「완료 조건」, T32~T34 | 시험 결과 (TC-01~16) |
+| 전이 (transition) | T35 | 서명된 APK, Windows zip |
+| 확인 (validation) | T30(처음 보는 사람 시연), T37 | 수용 기준 결과 |
+| 형상 관리 | AGENTS.md 5·8절 (브랜치·커밋·버전), 문서 변경 이력 | Git 기록 |
+| 품질 보증 | `flutter analyze` 0, 커버리지 80 % (NF-19, NF-20) | 분석 결과 |
 
 선행 관계 (화살표 = 먼저 끝나야 함):
 
@@ -90,6 +116,8 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 | AC-12 폰·헤드셋 사이드로드 | T35 |
 | AC-13 장애 시나리오 | T32 |
 | AC-14 테스트·성능 | T33 T34 |
+| AC-15 접근성 | T14 T31 |
+| AC-16 한국어·지역화 | T3 T18 T21 T31 T36 |
 
 ---
 
@@ -106,8 +134,8 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 - M0 · 관련: 완전 로컬 · 선행: T1
 - 파일: `pubspec.yaml`, `analysis_options.yaml`, `lib/main.dart`, `lib/app.dart`, `android/`, `windows/`, `.gitignore`
 - 만들 것: 빈 `AzApp`, design.md 6.2 표의 파일들(빈 파일)
-- 할 일: 저장소 루트에서 `flutter create --project-name a_z --platforms=windows,android .` 실행(`--overwrite`는 쓰지 않음. 기존 README·docs가 그대로인지 확인) · Android `applicationId`를 `app.az.archive`로, 앱·창 이름을 `A-Z`로 · release `AndroidManifest.xml`에서 INTERNET 빼기(debug·profile에만) · `MANAGE_EXTERNAL_STORAGE` 선언 · `flutter_lints` 적용 · `.gitignore`에 `android/key.properties`, `*.jks` 추가
-- 완료 조건: 빈 창이 Windows와 Android(기기 또는 에뮬레이터)에서 뜬다 · `flutter analyze` 경고 0 · release APK 권한 목록에 INTERNET이 없다
+- 할 일: 저장소 루트에서 `flutter create --project-name a_z --platforms=windows,android .` 실행(`--overwrite`는 쓰지 않음. 기존 README·docs가 그대로인지 확인) · Android `applicationId`를 `app.az.archive`로, 앱·창 이름을 `A-Z`로 · release `AndroidManifest.xml`에서 INTERNET 빼기(debug·profile에만) · `MANAGE_EXTERNAL_STORAGE` 선언 · `flutter_lints` 적용 · `.gitignore`에 `android/key.properties`, `*.jks` 추가 · 로캘 `ko-KR` 설정(`flutter_localizations`, design.md 2.7의 `AzRegion`)
+- 완료 조건: 빈 창이 Windows와 Android(기기 또는 에뮬레이터)에서 뜬다 · `flutter analyze` 경고 0 · release APK 권한 목록에 INTERNET이 없다 · 기본 위젯 문구(복사·붙여넣기 메뉴 등)가 한국어로 나온다(LC-02)
 - 확인: `flutter run -d windows` · `flutter run -d <기기>` · `flutter build apk --release` 후 `apkanalyzer manifest permissions`
 
 ---
@@ -117,9 +145,9 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 ### T3 기록 모델
 - M1 · 관련: F-01 · 선행: T2
 - 파일: `lib/archive.dart`, `test/archive_model_test.dart`
-- 만들 것: `Post`, `MediaRef`, `MediaKind`, `Category`, `PostQuery`, `TagParser`, `AzException` 계층(`NotFound`, `InvalidLocation`, `StorageUnavailable`, `VaultConflict`, `CorruptedFile`, `MediaUnsupported`)
-- 할 일: 값 객체와 `copyWith`, `PostQuery.matches(post)`, 태그 추출(design.md 4.1 본문 규칙)
-- 완료 조건: 한글 태그 · 코드 블록 속 `#` 제외 · `# 제목` 제외 · 유형 필터(사진·영상·메모) · 숨긴 카테고리 테스트 통과
+- 만들 것: `Post`, `MediaRef`, `MediaKind`, `Category`, `PostQuery`, `TagParser`, `KoText`, `AzException` 계층(`NotFound`, `InvalidLocation`, `StorageUnavailable`, `VaultConflict`, `CorruptedFile`, `MediaUnsupported`)
+- 할 일: 값 객체와 `copyWith`, `PostQuery.matches(post)`, 태그 추출(design.md 4.1 본문 규칙), `KoText`(NFC 정규화·ko-KR 정렬, design.md 2.7)
+- 완료 조건: 한글 태그 · 코드 블록 속 `#` 제외 · `# 제목` 제외 · 유형 필터(사진·영상·메모) · 숨긴 카테고리 테스트 통과 · NFD 문자열 검색과 「1 → A → 가 → 나」 정렬 시험 통과(LC-08, LC-09)
 - 확인: `flutter test test/archive_model_test.dart`
 
 ### T4 Archive
@@ -127,11 +155,11 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 - 파일: `lib/archive.dart`, `lib/vault.dart`(공개 API 뼈대만), `test/archive_test.dart`
 - 만들 것: `Archive`, `ArchiveStats`, `OrbitGraph`, `Clock`(지금 시각, 테스트에서 고정)
 - 할 일: design.md 6.3의 `Archive` 메서드 구현 · `Vault`는 공개 메서드 시그니처만 먼저 만들고(`UnimplementedError`), 테스트에서는 `class FakeVault implements Vault`로 대신 · 궤도 그래프 링크 규칙(같은 태그끼리 시간순 이웃)
-- 완료 조건: 작성·수정·삭제·카테고리 이동이 `Vault` 호출로 이어진다 · 변경 알림이 온다 · 가짜 포스트 2,000개에서 `query` 50ms 이내
+- 완료 조건: 작성·수정·삭제·카테고리 이동이 `Vault` 호출로 이어진다 · 변경 알림이 온다 · 가짜 포스트 2,000개에서 `query` 50 ms 이내
 - 확인: `flutter test test/archive_test.dart`
 
 ### T5 PostCodec
-- M1 · 관련: F-01 F-15, AC-7 · 선행: T4
+- M1 · 관련: F-01 F-15, DR-01 DR-04 DR-05, AC-7 · 선행: T4
 - 파일: `lib/vault.dart`, `test/post_codec_test.dart`, `test/fixtures/`(예시 `.md`)
 - 만들 것: `PostCodec`
 - 할 일: `.md` ↔ `Post`. 머리말 없음·일부 없음·모르는 필드 보존·`![[이름만]]`·`![](경로)`·체크리스트
@@ -142,7 +170,7 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 - M1 · 관련: F-01 F-06 F-07, AC-6 AC-10 · 선행: T5
 - 파일: `lib/vault.dart`, `test/vault_test.dart`
 - 만들 것: `AtomicWriter`, `Vault`(T4 뼈대를 실제 구현으로), `Trash`
-- 할 일: design.md 4절 규칙 그대로: 만들기·열기·목록·읽기·쓰기(수정 시각 비교 → `VaultConflict`)·첨부 복사(이름 충돌 ` (2)`)·카테고리 이동·휴지통·복원 · 모든 경로는 보관함 기준 상대 경로
+- 할 일: design.md 4절 규칙 그대로: 만들기·열기·목록·읽기·쓰기(수정 시각 비교 → `VaultConflict`)·첨부 복사(이름 충돌 ` (2)`)·카테고리 이동·휴지통·복원 · 모든 경로는 보관함 기준 상대 경로, 구분자 `/`, 이름은 NFC (DR-02, DR-03)
 - 완료 조건: `MemoryFileSystem`으로 위 기능 테스트 통과 · 보관함 폴더를 다른 경로로 복사해서 열어도 같은 결과(이식 테스트) · 남은 `.tmp`는 다음 열 때 정리
 - 확인: `flutter test test/vault_test.dart`
 
@@ -174,7 +202,7 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 - M1 · 관련: F-03 · 선행: T9
 - 파일: `lib/media.dart`, `test/thumbnail_test.dart`
 - 만들 것: `ThumbnailCache`
-- 할 일: `.az/thumbs/`에 긴 변 480px JPEG · 크기+수정 시각이 바뀌면 다시 만듦 · 무거운 일은 isolate
+- 할 일: `.az/thumbs/`에 긴 변 480 px JPEG · 크기+수정 시각이 바뀌면 다시 만듦 · 무거운 일은 isolate
 - 완료 조건: 같은 파일은 한 번만 만든다 · 원본이 바뀌면 다시 만든다 · 실패하면 `null`(앱은 자리표시)
 - 확인: `flutter test test/thumbnail_test.dart`
 
@@ -191,7 +219,7 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 - 파일: `tools/make_sample_media.py`, `assets/sample_vault/**`, `pubspec.yaml`(assets 등록)
 - 만들 것: 예시 보관함 (design.md 8.2)
 - 할 일: Pillow·OpenCV로 팔레트 색 링 이미지 4장·그라데이션 1장·6초 링 영상 1개 생성 · 포스트 7개 작성(시작하기·해부도·끊긴 링크 연습 포함)
-- 완료 조건: 합계 5MB 이하 · 모든 `.md`가 `PostCodec`으로 읽힌다(끊긴 링크 연습만 첨부 없음) · 자료가 모두 직접 만든 것임을 README의 라이선스 줄에 적는다
+- 완료 조건: 합계 5 MB 이하 · 모든 `.md`가 `PostCodec`으로 읽힌다(끊긴 링크 연습만 첨부 없음) · 자료가 모두 직접 만든 것임을 README의 라이선스 줄에 적는다
 - 확인: `python tools/make_sample_media.py` · `flutter test test/sample_vault_test.dart`
 
 ### T13 SampleVaultSeeder · TutorialController
@@ -210,8 +238,8 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 - M2 · 관련: — · 선행: M1 완료
 - 파일: `lib/theme.dart`, `assets/fonts/`, `pubspec.yaml`
 - 만들 것: `AzColors`, `AzShapes`, `AzMotion`, `AzTheme`, 배경 링 페인터
-- 할 일: design.md 2.2 토큰 그대로 · Pretendard 포함 · 피드 배경의 옅은 링·구체(패럴랙스·느린 회전)
-- 완료 조건: 위젯에 색·반경·시간 값을 직접 쓴 곳이 없다(`grep`으로 `Color(0x` 검색 시 theme.dart만) · 애니메이션 줄이기에서 배경이 멈춘다
+- 할 일: design.md 2.2 토큰 그대로(`categoriesText` 포함) · Pretendard 포함 · 피드 배경의 옅은 링·구체(패럴랙스·느린 회전)
+- 완료 조건: 위젯에 색·반경·시간 값을 직접 쓴 곳이 없다(`grep`으로 `Color(0x` 검색 시 theme.dart만) · 애니메이션 줄이기에서 배경이 멈춘다 · 글씨 색과 바탕 조합이 모두 4.5:1 이상이라는 자동 시험이 통과한다(TC-15 일부)
 - 확인: `flutter run -d windows`
 
 ### T15 HomeShell · AppState · 반응형
@@ -243,7 +271,7 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 - 파일: `lib/ui/components.dart`
 - 만들 것: `Composer`
 - 할 일: 글·첨부(Windows 끌어다 놓기 + 파일 선택)·카테고리·[게시] · 첨부 미리보기 칩 · 놓을 자리 강조
-- 완료 조건: 사진을 끌어다 놓아 게시하면 보관함에 `.md`와 사본이 생기고 피드 맨 위에 카드가 나타난다
+- 완료 조건: 사진을 끌어다 놓아 게시하면 보관함에 `.md`와 사본이 생기고 피드 맨 위에 카드가 나타난다 · Windows IME와 Android 한글 키보드로 조합 중인 글자가 깨지거나 두 번 들어가지 않는다(LC-07)
 - 확인: `flutter run -d windows` · 보관함 폴더 확인
 
 ### T19 뷰어
@@ -266,8 +294,8 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 - M2 · 관련: F-05 F-11 F-13 · 선행: T17
 - 파일: `lib/ui/components.dart`
 - 만들 것: `Legend`, `SearchBox`, `StatusPill`, `EmptyHint`
-- 할 일: 범례 숨김·유형 필터·검색·태그 칩 누르면 필터·결과 없음 안내·상태 알약
-- 완료 조건: 필터가 피드에 바로 적용되고 개수가 맞다
+- 할 일: 범례 숨김·유형 필터·검색·태그 칩 누르면 필터·결과 없음 안내·상태 알약 · 범례·태그는 `KoText.compare`로 정렬, 검색은 `KoText.normalize` 후 비교 · 개수는 `2,000`처럼 ko-KR 형식
+- 완료 조건: 필터가 피드에 바로 적용되고 개수가 맞다 · LC-04, LC-08, LC-09를 만족한다
 - 확인: `flutter run -d windows`
 
 ### T22 수정 · 삭제 · 즐겨찾기 · 카테고리
@@ -310,8 +338,8 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 - M3 · 관련: F-08 · 선행: T25
 - 파일: `lib/ui/orbit.dart`
 - 만들 것: `OrbitPainter`, `OrbitView`(그리기만)
-- 할 일: design.md 3.3의 층 1~5·7·8 · 숨긴 카테고리 8%
-- 완료 조건: 예시 보관함과 가짜 2,000개 자료가 레퍼런스와 비슷한 모습으로 그려진다 · 데스크톱 60fps
+- 할 일: design.md 3.3의 층 1~5·7·8 · 숨긴 카테고리 8 %
+- 완료 조건: 예시 보관함과 가짜 2,000개 자료가 레퍼런스와 비슷한 모습으로 그려진다 · 데스크톱 60 fps
 - 확인: `flutter run -d windows --profile`
 
 ### T27 라벨 · 선택 · 날아가기
@@ -350,12 +378,12 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 
 ## M4 출시
 
-### T31 움직임 · 입력 다듬기
-- M4 · 관련: 움직임, 화면·입력 · 선행: M3 완료
-- 파일: `lib/ui/*`
-- 할 일: design.md 2.6 표 전체 점검 · 애니메이션 줄이기 · hover 없이 모든 기능 · 터치 대상 48dp · 폰 1단 점검
-- 완료 조건: 애니메이션 줄이기를 켜면 이동·회전이 없다 · 마우스 없이(터치만) 모든 기능을 쓸 수 있다
-- 확인: Windows 설정 「애니메이션 효과」 끄고 실행 · Android 기기
+### T31 움직임 · 입력 · 접근성 다듬기
+- M4 · 관련: NF-08 NF-09 NF-12 LC-02~06, AC-15 AC-16 · 선행: M3 완료
+- 파일: `lib/ui/*`, `test/ui/accessibility_test.dart`
+- 할 일: design.md 2.6 표 전체 점검 · 애니메이션 줄이기 · hover 없이 모든 기능 · 터치 대상 48 dp · 폰 1단 점검 · ISO/IEC 40500 AA 점검(대비, 키보드만으로 조작, 모든 버튼에 `Semantics` 레이블, 글자 200 % 확대, 궤도 뷰의 대체 수단) · 한국어 점검(한글 11,172자 렌더링, ko-KR 날짜·숫자, 시간대 표시, TC-16)
+- 완료 조건: 애니메이션 줄이기를 켜면 이동·회전이 없다 · 마우스 없이(터치만) 모든 기능을 쓸 수 있다 · TC-15·TC-16 통과
+- 확인: Windows 설정 「애니메이션 효과」 끄고 실행 · Windows 내레이터 · Android TalkBack · `flutter test test/ui/accessibility_test.dart`
 
 ### T32 장애 시나리오
 - M4 · 관련: 가용성, AC-13 · 선행: T31
@@ -368,13 +396,13 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 - M4 · 관련: 성능, AC-14 · 선행: T31
 - 파일: `tools/`(가짜 2,000개 보관함 생성 스크립트), 필요하면 `lib/*`
 - 할 일: 포스트 2,000개·첨부 3,000개 보관함으로 측정 · 궤도 뷰 자동 품질 조절(design.md 3.4)
-- 완료 조건: 피드 첫 화면 2초 이내 · 궤도 뷰 데스크톱 60fps, 폰 30fps 이상(헤드셋은 가능하면) · 측정값을 progress.md에 기록
+- 완료 조건: 피드 첫 화면 2초 이내 · 궤도 뷰 데스크톱 60 fps, 폰 30 fps 이상(헤드셋은 가능하면) · 측정값을 progress.md에 기록
 - 확인: `flutter run --profile` + DevTools
 
 ### T34 e2e
 - M4 · 관련: AC-1 AC-2 AC-4 AC-6 AC-14 · 선행: T32
 - 파일: `integration_test/app_test.dart`
-- 할 일: design.md 11절 시나리오 A~E · 보관함은 시스템 임시 폴더에
+- 할 일: design.md 11.3의 시스템 수준 시험 사례(TC-01~11, TC-13, TC-14)를 `integration_test`로 · 보관함은 시스템 임시 폴더에
 - 완료 조건: Windows에서 전부 통과 · Android(debug)에서 통과(기기가 없으면 「미확인」 기록)
 - 확인: `flutter test integration_test -d windows` · `flutter test integration_test -d <기기>`
 
@@ -388,13 +416,23 @@ T1 -> T2 -> T3 -> T4 -> T5 -> T6 -+-> T7 --------------------------------------+
 ### T36 (Could) 휴지통 화면 · 단축키 · zip 내보내기
 - M4 · 관련: F-18 F-19 F-20, AC-10 · 선행: T35
 - 파일: `lib/ui/components.dart`, `lib/vault.dart`
-- 할 일: 휴지통 목록·복원·비우기 · 단축키(N, /, 1, 2, J, K) · 보관함 zip 내보내기
+- 할 일: 휴지통 목록·복원·비우기 · 단축키(N, /, 1, 2, J, K)는 `PhysicalKeyboardKey`로(한글 자판에서도 동작, LC-10) · 보관함 zip 내보내기
 - 완료 조건: 각 기능을 화면에서 쓸 수 있다
 - 확인: `flutter run -d windows`
 
 ### T37 마무리 점검
 - M4 · 관련: 모든 AC · 선행: T35
 - 파일: `README.md`, `docs/progress.md`
-- 할 일: 스크린샷(시작 화면·피드·궤도·폰) 추가 · requirements.md 7절 AC-1~14를 하나씩 확인해 결과를 progress.md에 표로
-- 완료 조건: 모든 AC가 「통과」 또는 이유가 적힌 「미확인」이다
+- 할 일: 스크린샷(시작 화면·피드·궤도·폰) 추가 · requirements.md 4.2의 AC-1~16을 하나씩 확인해 결과를 progress.md에 「시험 완료 보고」 표로(ISO/IEC/IEEE 29119-3) · 모든 문서의 버전을 1.0으로 올리고 상태를 「승인」으로(프로젝트 소유자 확인 후)
+- 완료 조건: 모든 AC가 「통과」 또는 이유가 적힌 「미확인」이다 · 문서 정보 표와 변경 이력이 갱신되었다
 - 확인: 문서 검토
+
+---
+
+## 변경 이력
+
+| 버전 | 날짜 | 변경 내용 | 작성 |
+|---|---|---|---|
+| 0.1 | 2026-10-21 | 최초 작성 (T1~T37) | Claude Code |
+| 0.2 | 2026-10-21 | 문서 정보 표, ISO/IEC/IEEE 12207 프로세스 대응표 추가. 시험 사례(TC)·자료 요구(DR)·접근성(AC-15, T31) 연결 | Claude Code |
+| 0.3 | 2026-10-21 | 대상 지역 대한민국(ISO 3166-1 `KR`) 반영: T2 로캘, T3 `KoText`, T18 한글 입력, T21 정렬·검색·숫자, T31 한국어 점검, T36 물리 키 단축키, AC-16 | Claude Code |

@@ -4,12 +4,18 @@
 
 **처음으로** · [요구사항](docs/requirements.md) · [설계](docs/design.md) · [작업 순서](docs/tasks.md) · [진행 상황](docs/progress.md) · [작업 지침](AGENTS.md)
 
+| 문서 번호 | 버전 · 상태 | 수정일 |
+|---|---|---|
+| AZ-OVW (개요) | 0.3 · 초안 (검토 대기) | 2026-10-21 |
+
 아무 드라이브(C:·D:·외장 디스크·SD 카드)나 원하는 위치에 **보관함 폴더**를 하나 만들고 사진·영상·메모를 모읍니다.
 피드에서는 트위터처럼 시간순 카드로, **궤도 뷰**에서는 카테고리별 구체와 링이 떠 있는 3D 공간으로 둘러봅니다.
 보관함은 평범한 마크다운 파일과 첨부 파일로 되어 있어서 **폴더째 복사하면 다른 드라이브·기기로 옮기기와 백업이 끝납니다.**
 
 <!-- 스크린샷: T37에서 추가 -->
 
+> **대상 지역**: 대한민국 — ISO 3166-1 `KR` · `KOR` · `410` · 로캘 `ko-KR`
+>
 > **지금 상태**: 계획 문서 단계입니다. 코드는 아직 없고, 다음 작업은 T1(개발 환경)입니다. → [진행 상황](docs/progress.md)
 
 ## 처음 왔다면 (사람·AI 도구 모두)
@@ -24,13 +30,13 @@ README.md ........ 무엇을 만드는지, 한눈에 보기 (지금 이 파일)
   -> docs/requirements.md / docs/design.md ... 카드가 가리키는 부분만
 ```
 
-| 문서 | 담긴 것 | 번호 체계 |
-|---|---|---|
-| [requirements.md](docs/requirements.md) | 무엇이 되어야 하나 | F-01~20 (기능), AC-1~14 (수용 기준) |
-| [design.md](docs/design.md) | 어떤 구조로 만들까 | 1~14절 |
-| [tasks.md](docs/tasks.md) | 어떤 순서로 구현할까 | T1~T37, 마일스톤 M0~M4 |
-| [progress.md](docs/progress.md) | 지금 어디까지 했나 | 상태판, D-xx (결정), Q-xx (질문) |
-| [AGENTS.md](AGENTS.md) | 작업 규칙 | — |
+| 문서 번호 | 문서 | 담긴 것 | 번호 체계 |
+|---|---|---|---|
+| AZ-SRS | [requirements.md](docs/requirements.md) | 소프트웨어 요구사항 명세: 무엇이 되어야 하나 | F-xx.y (기능), NF-xx (품질), IF·CN·DR, AC-1~16 (수용 기준) |
+| AZ-AD | [design.md](docs/design.md) | 아키텍처 기술 + 시험 계획: 어떤 구조로 만들까 | 0~14절, TC-01~16 (시험 사례) |
+| AZ-SDP | [tasks.md](docs/tasks.md) | 소프트웨어 개발 계획: 어떤 순서로 구현할까 | T1~T37, 마일스톤 M0~M4 |
+| AZ-PSR | [progress.md](docs/progress.md) | 진행 상태 보고: 지금 어디까지 했나 | 상태판, D-xx (결정), Q-xx (질문) |
+| AZ-PRC | [AGENTS.md](AGENTS.md) | 작업 절차서 | — |
 
 AI 도구별 지침 파일은 모두 `AGENTS.md`를 가리킵니다: `CLAUDE.md`(Claude Code), `GEMINI.md`(Gemini CLI), `.github/copilot-instructions.md`(GitHub Copilot). Codex·Cursor 등은 `AGENTS.md`를 바로 읽습니다.
 
@@ -189,8 +195,8 @@ mini project/
  +-- pubspec.yaml
  +-- lib/
  |    +-- main.dart ............ main()  객체 조립(합성 루트)
- |    +-- app.dart ............. AzApp, HomeShell, AppState, AppScope
- |    +-- archive.dart ......... Post, MediaRef, MediaKind, Category, PostQuery, TagParser, Archive, Clock, AzException
+ |    +-- app.dart ............. AzApp, HomeShell, AppState, AppScope, AzRegion
+ |    +-- archive.dart ......... Post, MediaRef, MediaKind, Category, PostQuery, TagParser, KoText, Archive, Clock, AzException
  |    +-- vault.dart ........... Vault, PostCodec, AtomicWriter, VaultIndex, VaultSettings, VaultWatcher, Trash
  |    +-- storage.dart ......... StorageLocator > WindowsStorageLocator / AndroidStorageLocator,
  |    |                          StorageVolume, LocationCheck, VaultCatalog
@@ -231,6 +237,27 @@ mini project/
 - [작업 순서](docs/tasks.md): 어떤 순서로 구현할까 (T1~T37)
 - [진행 상황](docs/progress.md): 지금 어디까지 했나
 - [작업 지침](AGENTS.md): 사람과 AI 도구가 이 저장소에서 지킬 규칙
+
+## 적용 표준
+
+문서와 앱은 아래 ISO·IEC 표준을 따릅니다. 어느 문서가 어느 표준을 따르는지는 각 문서 맨 위의 문서 정보 표에 있습니다.
+
+| 표준 | 무엇에 | 적용한 곳 |
+|---|---|---|
+| ISO/IEC/IEEE 29148:2018 | 요구사항 명세 구조, 요구 속성(ID·우선순위·검증 방법) | AZ-SRS |
+| ISO/IEC 25010:2023 | 품질 요구 분류 (성능·호환성·상호작용·신뢰성·보안·유지보수·유연성·안전) | AZ-SRS 3.3 |
+| ISO/IEC/IEEE 42010:2022 | 아키텍처 기술 (이해관계자·관심사·관점·뷰·결정) | AZ-AD 0절 |
+| ISO/IEC/IEEE 29119-3:2021 | 시험 문서 (시험 계획·시험 사례·완료 보고) | AZ-AD 11절, AZ-PSR |
+| ISO/IEC/IEEE 12207:2017 | 소프트웨어 생애주기 프로세스 | AZ-SDP |
+| ISO/IEC/IEEE 15289:2019 | 문서 정보·버전·변경 이력 | 모든 문서 |
+| ISO/IEC 40500:2012 (WCAG 2.0) AA | 접근성 (글자 대비 4.5:1 등) | AZ-SRS NF-09, AZ-AD 2절 |
+| ISO 9241-110:2020 | 상호작용 원칙 (자기 서술성, 학습 용이성 등) | 튜토리얼·안내 문구 |
+| ISO 8601-1:2019 | 날짜·시각 | 모든 문서, 보관함 파일 |
+| ISO 80000-1, IEC 80000-13 | 수량·단위 표기 (`2 s`, `500 MB`, `1 MiB`) | 모든 문서 |
+| ISO/IEC 10646 | 문자 (UTF-8) | 모든 파일 |
+| ISO 3166-1:2020, ISO 3166-2:2020 | 대상 국가 `KR`·`KOR`·`410`, 하위 구분 `KR-xx` | AZ-SRS 3.7, `AzRegion` |
+| ISO 639, BCP 47 | 언어 `ko`, 로캘 `ko-KR` | 화면, 모든 문서 |
+| (참고) UN M49 | 지역 Asia `142`, Eastern Asia `030` | `AzRegion` |
 
 ## 라이선스
 
