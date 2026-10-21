@@ -11,5 +11,8 @@ trim_trailing_whitespace = true
 [*.md]
 trim_trailing_whitespace = false
 
-[*.{bat,cmd,ps1}]
+[*.dart]
+indent_size = 2
+
+[*.{py,bat,cmd,ps1}]
 end_of_line = crlf

@@ -1,5 +1,7 @@
-# 줄바꿈을 LF로 통일 (Windows 스크립트만 CRLF)
+# 줄바꿈 LF 통일
 * text=auto eol=lf
+
+# Windows 스크립트는 CRLF
 *.bat text eol=crlf
 *.cmd text eol=crlf
 *.ps1 text eol=crlf
@@ -10,14 +12,13 @@
 *.jpeg binary
 *.gif binary
 *.webp binary
-*.bmp binary
-*.ico binary
 *.mp4 binary
 *.mov binary
 *.webm binary
 *.ttf binary
 *.otf binary
+*.woff binary
+*.woff2 binary
+*.jar binary
 *.jks binary
 *.keystore binary
-*.apk binary
-*.zip binary
