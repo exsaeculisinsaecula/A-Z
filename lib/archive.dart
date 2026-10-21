@@ -360,6 +360,30 @@ class Archive extends ChangeNotifier {
 
   Archive({Clock? clock}) : _clock = clock ?? Clock();
 
+  /// Vault에서 불러오기 (보관함 .md 파일 → 메모리)
+  Future<void> loadFromVault(dynamic vault) async {
+    _posts.clear();
+    await for (final rel in vault.listPostPaths()) {
+      try {
+        final post = await vault.readPost(rel);
+        _posts.add(post);
+      } catch (_) {
+        // 손상된 파일 건너뜀
+      }
+    }
+    notifyListeners();
+  }
+
+  /// 변경 사항을 Vault에 저장
+  Future<void> saveToVault(dynamic vault, Post post) async {
+    await vault.writePost(post);
+  }
+
+  /// Vault에서 삭제 (휴지통)
+  Future<void> trashInVault(dynamic vault, String relativePath) async {
+    await vault.trashPost(relativePath);
+  }
+
   // ── 조회
 
   /// 필터 + 정렬(최신순) + 페이징

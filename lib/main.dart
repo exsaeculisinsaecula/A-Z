@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'archive.dart';
 import 'theme.dart';
 import 'ui/feed.dart';
+import 'ui/orbit.dart';
 
 /// 대상 지역 (ISO 3166-1 `KR`)
 abstract final class AzRegion {
@@ -148,7 +149,11 @@ class _HomeShellState extends State<HomeShell> {
                     child: Row(
                       children: [
                         if (isDesktop || isTablet) _LegendPanel(state: _state),
-                        Expanded(child: FeedView(state: _state)),
+                        Expanded(
+                          child: _navIndex == 0
+                              ? FeedView(state: _state)
+                              : OrbitView(state: _state),
+                        ),
                         if (isDesktop) _NavigatorPanel(state: _state),
                       ],
                     ),

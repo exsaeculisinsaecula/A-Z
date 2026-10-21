@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../archive.dart';
 import '../main.dart';
@@ -49,6 +50,7 @@ class _Composer extends StatefulWidget {
 class _ComposerState extends State<_Composer> {
   final _ctrl = TextEditingController();
   String _category = '미분류';
+  final List<String> _attachedFiles = [];
 
   @override
   void dispose() {
@@ -56,11 +58,35 @@ class _ComposerState extends State<_Composer> {
     super.dispose();
   }
 
+  Future<void> _pickFiles() async {
+    final picker = ImagePicker();
+    final files = await picker.pickMultiImage();
+    setState(() {
+      _attachedFiles.addAll(files.map((f) => f.path));
+    });
+  }
+
+  void _removeAttachment(int index) {
+    setState(() => _attachedFiles.removeAt(index));
+  }
+
   void _submit() {
     final text = _ctrl.text.trim();
-    if (text.isEmpty) return;
-    widget.state.archive.create(text: text, category: _category);
+    if (text.isEmpty && _attachedFiles.isEmpty) return;
+    // 첨부 파일을 MediaRef로 변환
+    final media = _attachedFiles.map((path) {
+      final name = path.split('\\').last.split('/').last;
+      final ext = name.split('.').last.toLowerCase();
+      final isVideo = ['mp4', 'mov', 'webm', 'mkv', 'avi'].contains(ext);
+      return MediaRef(path: name, kind: isVideo ? MediaKind.video : MediaKind.photo);
+    }).toList();
+    widget.state.archive.create(
+      text: text.isEmpty ? '(첨부 파일)' : text,
+      category: _category,
+      media: media,
+    );
     _ctrl.clear();
+    setState(() => _attachedFiles.clear());
   }
 
   @override
@@ -75,8 +101,31 @@ class _ComposerState extends State<_Composer> {
       ),
       child: Column(
         children: [
+          // 첨부 파일 미리보기
+          if (_attachedFiles.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: List.generate(_attachedFiles.length, (i) {
+                final name = _attachedFiles[i].split('\\').last.split('/').last;
+                return Chip(
+                  label: Text(name, style: const TextStyle(fontSize: 11)),
+                  deleteIcon: const Icon(Icons.close, size: 14),
+                  onDeleted: () => _removeAttachment(i),
+                  backgroundColor: AzColors.space2,
+                );
+              }),
+            ),
+          ],
           Row(
             children: [
+              // 파일 첨부 버튼
+              IconButton(
+                onPressed: _pickFiles,
+                icon: const Icon(Icons.attach_file, color: AzColors.inkSub, size: 20),
+                tooltip: '사진·영상 첨부',
+              ),
               Expanded(
                 child: TextField(
                   controller: _ctrl,
