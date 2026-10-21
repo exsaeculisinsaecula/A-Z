@@ -1,0 +1,25 @@
+# GitHub Pages 문서 사이트 설정 (앱과는 관계없음)
+title: A-Z
+description: 사진·영상·메모를 A부터 Z까지 한 곳에 — 계획 문서
+lang: ko
+theme: jekyll-theme-cayman
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+# 문서가 아닌 것은 사이트에서 뺀다
+exclude:
+  - CLAUDE.md
+  - GEMINI.md
+  - lib/
+  - android/
+  - windows/
+  - assets/
+  - test/
+  - integration_test/
+  - tools/
+  - build/
+  - pubspec.yaml
+  - pubspec.lock
+  - analysis_options.yaml
